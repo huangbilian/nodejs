@@ -93,6 +93,15 @@
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
 <script>
-    
+    var readmore = document.getElementsByClassName('readmore');
+    var i = 0;
+    while(i < readmore.length){
+        (function(i){
+            readmore[i].onclick = function(){
+                window.location = "http://localhost:8083/detail?chapterId=" + (i+1);
+            }
+        })(i)
+        i++;
+    }
 </script>
 </html>

@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
     <style>
         * {
             margin: 0;
@@ -110,8 +109,35 @@
 </body>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
-
-
-    
+    window.onload=function(){
+        let name = document.getElementById('username');
+        let pswd = document.getElementById('pwd');
+        let login = document.getElementById('login');
+        console.log(name, pswd);
+        login.onclick=function(){
+            let msg = {
+                name: name.value,
+                pswd: pswd.value
+            }
+            msg = JSON.stringify(msg);
+            let reqmsg = {
+                    method: 'POST',
+                    body: msg,
+                    headers: {'Content-Type':'application/json'}
+                }
+                
+            //console.log(msg);
+            // console.log(reqmsg);
+            fetch('http://localhost:8083/login',reqmsg).then(res=>{
+                if(res.ok){
+                    window.location = 'http://localhost:8083/addChapter'
+                }else{
+                    console.log('ERROR LOGIN');
+                }
+            })
+        }
+    }
 </script>
 </html>
+
+

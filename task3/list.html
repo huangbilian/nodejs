@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="js/baiduTemplate.js"></script>
-    <title>Document</title>
+
     <style type="text/css">
         * {
             margin: 0;
@@ -212,6 +212,12 @@
 </body>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
-   
+
+    function addChapter(){
+        $.post("http://localhost:8083/add", {"title": $("#title").val(), "content": $("#ct").html()}, function(data) {
+            window.location = "http://localhost:8083/addChapter"
+        })
+    }
+
 </script>
 </html>
