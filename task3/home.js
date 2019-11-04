@@ -22,16 +22,19 @@ http.createServer(function(req, res) {
     case 'GET':
       show(req, res);
       break;
-
     case 'POST':
       add(req, res);
       break;
-
+    case 'DELETE':
+      remove(req, res);
+      break;
     default:
       err(res);
       break;
   }
 }).listen(8083);
+
+
 
 
 function show(req, res) {
@@ -49,6 +52,7 @@ function show(req, res) {
   else if(URL.parse(req.url).pathname == '/getDetail'){
     let Id=URL.parse(req.url,true).query.chapterId-1;
     var m = chapterList[Id];
+    //log(m);
     res.writeHead(200, {'Content-Type': 'text/json'});
     res.end(JSON.stringify(m));
   }
@@ -78,6 +82,9 @@ function show(req, res) {
       res.end(data);
     });
   }
+  else{
+    res.end('ERROR');
+  }
   
 }
 
@@ -85,21 +92,22 @@ function show(req, res) {
 
 function add(req, res) {
   if(req.url == '/login') {
+    //登录
     var htmlName = fs.readFileSync('./chapterList.html');
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.end(htmlName);
     postlogin(req, res);
   }
-  if(req.url =='/add'){
+  else if(req.url =='/add'){
     postadd(req,res);
   }
 }
   
 function postlogin(req, res){
-  let user = '';
+  var user = '';
   let f = 0;
-  req.on('data', (data)=>{
-    user += data;
+  req.on('data', (item)=>{
+    user += item;
   });
   req.on('end', ()=>{
     userList.map((item)=>{
@@ -107,6 +115,9 @@ function postlogin(req, res){
         f= 1;
         res.statusCode = 200;
         res.end('OK');
+      }
+      else{
+        log('Username Or Password Error');
       }
     });
     if(f == 0){
@@ -117,10 +128,10 @@ function postlogin(req, res){
 }
 
 function postadd(req, res){
-  let essay = '';
+  var essay = '';
 
-  req.on('data', (data)=>{
-    essay += data;
+  req.on('data', (item)=>{
+    essay += item;
   });
 
   req.on('end', ()=>{
@@ -132,7 +143,7 @@ function postadd(req, res){
       chapterDes: essay.chapterDes || undefined,
       chapterContent: essay.content || '',
       publishTimer: new Date().getTime(),
-      author: essay.author || undefined,
+      author: essay.author,
       views: 1,
     }
     chapterList.push(item);
