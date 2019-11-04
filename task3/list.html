@@ -218,28 +218,28 @@
         })
     }
 
-    // $(document).ready(function(){
-    //     $.get("http://localhost:8083/data",(data)=>{
-    //         var dataObj = JSON.parse(data);
-    //         for(var i=0;i<dataObj.length;i++){
-    //             var parenttr=$('<tr></tr>');
-    //             var td1=$('<td></td>');
-    //             var td2=$('<td></td>');
-    //             var td3=$('<td></td>');
-    //             var td4=$('<td></td>');
-    //             td1.append(dataObj[i].chapterId);
-    //             td2.append(dataObj[i].chapterName);
-    //             td3.append(dataObj[i].views);
-    //             td4.append('admin');
-    //             td1.appendTo(parenttr);
-    //             td2.appendTo(parenttr);
-    //             td3.appendTo(parenttr);
-    //             td4.appendTo(parenttr);
-    //             $('#result').append(parenttr);
+    $(document).ready(function(){
+        $.get("http://localhost:8083/data",(data)=>{
+            var dataObj = JSON.parse(data);
+            for(var i=0;i<dataObj.length;i++){
+                var parenttr=$('<tr></tr>');
+                var td1=$('<td></td>');
+                var td2=$('<td></td>');
+                var td3=$('<td></td>');
+                var td4=$('<td></td>');
+                td1.append(dataObj[i].chapterId);
+                td2.append(dataObj[i].chapterName);
+                td3.append(dataObj[i].views);
+                td4.append('admin');
+                td1.appendTo(parenttr);
+                td2.appendTo(parenttr);
+                td3.appendTo(parenttr);
+                td4.appendTo(parenttr);
+                $('#result').append(parenttr);
             
-    //         }
-    //     })
-    // })
+            }
+        })
+    })
 
     
 

@@ -7,6 +7,8 @@ const http = require('http'),
 
 const { chapterList} = require('./data');
 
+//Id = 0;
+
 var userList = [
     {username: "admin", pwd: "admin"}
 ]
@@ -39,10 +41,16 @@ function show(req, res) {
     res.end(htmlName);
   }
   else if(URL.parse(req.url).pathname == '/detail'){
-    Id=URL.parse(req.url).query.replace(/chapterId=/,"")-1;
+    //Id=URL.parse(req.url).query.replace(/chapterId=/,"")-1;
     var htmlName = fs.readFileSync('./chapter.html');
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.end(htmlName);
+  }
+  else if(URL.parse(req.url).pathname == '/getDetail'){
+    let Id=URL.parse(req.url,true).query.chapterId-1;
+    var m = chapterList[Id];
+    res.writeHead(200, {'Content-Type': 'text/json'});
+    res.end(JSON.stringify(m));
   }
   else if(req.url == '/login') { 
     var htmlName = fs.readFileSync('./login.html');
@@ -125,11 +133,12 @@ function postadd(req, res){
       chapterContent: essay.content || '',
       publishTimer: new Date().getTime(),
       author: essay.author || undefined,
-      views: essay.views || 0,
+      views: 1,
     }
     chapterList.push(item);
-    fs.writeFileSync('./data.js', JSON.stringify(chapterList));
+    //fs.writeFileSync('./data.js', JSON.stringify(chapterList));
   })
+  res.write(JSON.stringify(chapterList));
   res.end('OK');
 }
 
