@@ -44,7 +44,7 @@ function show(req, res) {
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.end(htmlName);
   }
-  else if(req.url == '/login') {
+  else if(req.url == '/login') { 
     var htmlName = fs.readFileSync('./login.html');
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.end(htmlName);
@@ -59,6 +59,10 @@ function show(req, res) {
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.end(htmlName);
   }
+  else if(req.url == '/data'){
+    res.write(JSON.stringify(chapterList));
+    res.end();
+  }
   else if(req.url != '/'){
     var cpurl = '.'+req.url;
     res.writeHead(200, {'Content-type':"text/css"});
@@ -66,15 +70,21 @@ function show(req, res) {
       res.end(data);
     });
   }
+  
 }
 
 
 
 function add(req, res) {
-  var htmlName = fs.readFileSync('./login.html');
+  if(req.url == '/login') {
+    var htmlName = fs.readFileSync('./chapterList.html');
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.end(htmlName);
     postlogin(req, res);
+  }
+  if(req.url =='/add'){
+    postadd(req,res);
+  }
 }
   
 function postlogin(req, res){
@@ -96,6 +106,31 @@ function postlogin(req, res){
       res.end('ERROR')
     }
   });
+}
+
+function postadd(req, res){
+  let essay = '';
+
+  req.on('data', (data)=>{
+    essay += data;
+  });
+
+  req.on('end', ()=>{
+    essay = qs.parse(essay.toString('utf8'));
+    let item = {
+      chapterId: chapterList.length+1,
+      chapterName: essay.title || '',
+      imgPath: essay.imgPath || undefined,
+      chapterDes: essay.chapterDes || undefined,
+      chapterContent: essay.content || '',
+      publishTimer: new Date().getTime(),
+      author: essay.author || undefined,
+      views: essay.views || 0,
+    }
+    chapterList.push(item);
+    fs.writeFileSync('./data.js', JSON.stringify(chapterList));
+  })
+  res.end('OK');
 }
 
 
